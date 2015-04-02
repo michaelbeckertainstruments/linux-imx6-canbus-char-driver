@@ -11,9 +11,9 @@
 
 struct time_segment_t {
 
-	unsigned int propseg;
-	unsigned int pseg1;
-	unsigned int pseg2;
+    unsigned int propseg;
+    unsigned int pseg1;
+    unsigned int pseg2;
 
 };
 
@@ -44,16 +44,16 @@ static const struct time_segment_t time_segments[18] = {
 
 
 /**
- *	We won't touch HW here, only do the calculation / lookup.
+ *  We won't touch HW here, only do the calculation / lookup.
  */
 unsigned int
-can_update_bitrate(	unsigned int can_clock_frequency,	/*	Can protocol engine clock, input from CCM   */
-					enum can_bitrate bitrate)	        /*	Requested Bitrate */
+can_update_bitrate( unsigned int can_clock_frequency,   /*  Can protocol engine clock, input from CCM   */
+                    enum can_bitrate bitrate)           /*  Requested Bitrate */
 {
     unsigned int reg;
-    unsigned int presdiv;	/* Clock pre-divider */
+    unsigned int presdiv;   /* Clock pre-divider */
     struct time_segment_t ts;
-	int valid = 1;
+    int valid = 1;
 
     if (can_clock_frequency == 30000000){
 
@@ -100,7 +100,7 @@ can_update_bitrate(	unsigned int can_clock_frequency,	/*	Can protocol engine clo
                 break;
 
             default:
-				valid = 0;
+                valid = 0;
                 presdiv = 0; 
                 ts = time_segments[0]; 
                 printk(KERN_ERR "CAN bitrate not supported\n");
@@ -108,25 +108,25 @@ can_update_bitrate(	unsigned int can_clock_frequency,	/*	Can protocol engine clo
         }
     }
     else { 
-		valid = 0;
+        valid = 0;
         presdiv = 0; 
         ts = time_segments[0]; 
         printk(KERN_ERR "CAN PE_CLK input to CAN module speed not supported\n");
-	}
+    }
     
 
-	if (valid){
-		reg = (presdiv << 24) + (ts.pseg1 << 19) + (ts.pseg2 << 16) + (ts.propseg);
+    if (valid){
+        reg = (presdiv << 24) + (ts.pseg1 << 19) + (ts.pseg2 << 16) + (ts.propseg);
         printk( KERN_INFO 
                 "CAN bitrate setup presdiv: %d  "
                 "pseg1: 0x%x  pseg2: 0x%x  propseg: 0x%x\n",
                 presdiv, ts.pseg1, ts.pseg2, ts.propseg);
-	}
-	else{
-		reg = 0;
-	}
+    }
+    else {
+        reg = 0;
+    }
 
-	return reg;
+    return reg;
 }
 
 

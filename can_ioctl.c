@@ -34,91 +34,91 @@ long can_ioctl (struct file *filp, unsigned int cmd, unsigned long arg)
         return -EBADFD;
     }
 
-	switch(cmd){
+    switch(cmd){
 
-		case CAN_IOCTL_READ_MCR:
-			reg = ioread32(&dev->registers->MCR);
+        case CAN_IOCTL_READ_MCR:
+            reg = ioread32(&dev->registers->MCR);
             if (copy_to_user((void *)arg, &reg, sizeof(unsigned int))){
                 return -EFAULT;
             }
-			break;
+            break;
 
-		case CAN_IOCTL_READ_CTRL1:
-			reg = ioread32(&dev->registers->CTRL1);
+        case CAN_IOCTL_READ_CTRL1:
+            reg = ioread32(&dev->registers->CTRL1);
             if (copy_to_user((void *)arg, &reg, sizeof(unsigned int))){
                 return -EFAULT;
             }
-			break;
+            break;
 
-		case CAN_IOCTL_READ_TIMER:
-			reg = ioread32(&dev->registers->TIMER);
+        case CAN_IOCTL_READ_TIMER:
+            reg = ioread32(&dev->registers->TIMER);
             if (copy_to_user((void *)arg, &reg, sizeof(unsigned int))){
                 return -EFAULT;
             }
-			break;
+            break;
 
-		case CAN_IOCTL_READ_ECR:
-			reg = ioread32(&dev->registers->ECR);
-			break;
+        case CAN_IOCTL_READ_ECR:
+            reg = ioread32(&dev->registers->ECR);
+            break;
 
-		case CAN_IOCTL_READ_ESR1:
-			reg = ioread32(&dev->registers->ESR1);
+        case CAN_IOCTL_READ_ESR1:
+            reg = ioread32(&dev->registers->ESR1);
             if (copy_to_user((void *)arg, &reg, sizeof(unsigned int))){
                 return -EFAULT;
             }
-			break;
+            break;
 
-		case CAN_IOCTL_READ_IMASK2:
-			reg = ioread32(&dev->registers->IMASK2);
+        case CAN_IOCTL_READ_IMASK2:
+            reg = ioread32(&dev->registers->IMASK2);
             if (copy_to_user((void *)arg, &reg, sizeof(unsigned int))){
                 return -EFAULT;
             }
-			break;
+            break;
 
-		case CAN_IOCTL_READ_IMASK1:
-			reg = ioread32(&dev->registers->IMASK1);
+        case CAN_IOCTL_READ_IMASK1:
+            reg = ioread32(&dev->registers->IMASK1);
             if (copy_to_user((void *)arg, &reg, sizeof(unsigned int))){
                 return -EFAULT;
             }
-			break;
+            break;
 
-		case CAN_IOCTL_READ_IFLAG2:
-			reg = ioread32(&dev->registers->IFLAG2);
+        case CAN_IOCTL_READ_IFLAG2:
+            reg = ioread32(&dev->registers->IFLAG2);
             if (copy_to_user((void *)arg, &reg, sizeof(unsigned int))){
                 return -EFAULT;
             }
-			break;
+            break;
 
-		case CAN_IOCTL_READ_IFLAG1:
-			reg = ioread32(&dev->registers->IFLAG1);
+        case CAN_IOCTL_READ_IFLAG1:
+            reg = ioread32(&dev->registers->IFLAG1);
             if (copy_to_user((void *)arg, &reg, sizeof(unsigned int))){
                 return -EFAULT;
             }
-			break;
+            break;
 
-		case CAN_IOCTL_READ_CTRL2:
-			reg = ioread32(&dev->registers->CTRL2);
+        case CAN_IOCTL_READ_CTRL2:
+            reg = ioread32(&dev->registers->CTRL2);
             if (copy_to_user((void *)arg, &reg, sizeof(unsigned int))){
                 return -EFAULT;
             }
-			break;
+            break;
 
-		case CAN_IOCTL_READ_ESR2:
-			reg = ioread32(&dev->registers->ESR2);
+        case CAN_IOCTL_READ_ESR2:
+            reg = ioread32(&dev->registers->ESR2);
             if (copy_to_user((void *)arg, &reg, sizeof(unsigned int))){
                 return -EFAULT;
             }
-			break;
+            break;
 
-		case CAN_IOCTL_READ_GFWR:
-			reg = ioread32(&dev->registers->GFWR);
+        case CAN_IOCTL_READ_GFWR:
+            reg = ioread32(&dev->registers->GFWR);
             if (copy_to_user((void *)arg, &reg, sizeof(unsigned int))){
                 return -EFAULT;
             }
-			break;
+            break;
 
 
-		case CAN_IOCTL_ENABLE_LOOPBACK:
+        case CAN_IOCTL_ENABLE_LOOPBACK:
             /*
              *  LOCK --------------------------------------------------------
              */
@@ -130,7 +130,7 @@ long can_ioctl (struct file *filp, unsigned int cmd, unsigned long arg)
              *  UNLOCK --------------------------------------------------------
              */
             spin_unlock_irqrestore(&dev->register_lock, flags);
-			break;
+            break;
 
 
         case CAN_IOCTL_DISABLE_LOOPBACK:
@@ -145,10 +145,10 @@ long can_ioctl (struct file *filp, unsigned int cmd, unsigned long arg)
              *  UNLOCK --------------------------------------------------------
              */
             spin_unlock_irqrestore(&dev->register_lock, flags);
-			break;
+            break;
 
 
-		case CAN_IOCTL_ENABLE_SELF_RECEPTION:
+        case CAN_IOCTL_ENABLE_SELF_RECEPTION:
             /*
              *  LOCK --------------------------------------------------------
              */
@@ -160,7 +160,7 @@ long can_ioctl (struct file *filp, unsigned int cmd, unsigned long arg)
              *  UNLOCK --------------------------------------------------------
              */
             spin_unlock_irqrestore(&dev->register_lock, flags);
-			break;
+            break;
 
 
         case CAN_IOCTL_DISABLE_SELF_RECEPTION:
@@ -175,20 +175,20 @@ long can_ioctl (struct file *filp, unsigned int cmd, unsigned long arg)
              *  UNLOCK --------------------------------------------------------
              */
             spin_unlock_irqrestore(&dev->register_lock, flags);
-			break;
+            break;
 
         /*
          *  Tells us that you are ready to start receiving messages.
          */
         case CAN_IOCTL_ENABLE_MESSAGE_ACCEPT:
             file->accept_messages = 1;
-			break;
+            break;
 
 
-		default:
+        default:
             printk(KERN_ERR PRINTK_DEV_NAME "Unknown IOCTL! %x\n", cmd);
-			return -EINVAL;
-	}
+            return -EINVAL;
+    }
 
     return 0;
 }

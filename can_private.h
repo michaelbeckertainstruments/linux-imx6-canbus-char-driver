@@ -69,7 +69,7 @@ struct kcanbus_message {
 struct canbus_device_t {
 
     unsigned int signature;         
-	struct cdev cdev;	                            /* Char device structure		*/
+    struct cdev cdev;                               /* Char device structure */
     spinlock_t register_lock;                       /* HW Lock, also for transmit_queue */
     struct FLEXCAN_HW_REGISTERS __iomem *registers; /* Access to the real Flexcan HW. */
     struct list_head transmit_queue;                /* Queue of messages to TX */
@@ -85,12 +85,12 @@ struct canbus_device_t {
     int irq;                                        /* CANbus IRQ number */
 
     int stby_gpio;
-	enum of_gpio_flags stby_gpio_flags;
+    enum of_gpio_flags stby_gpio_flags;
 
     struct platform_device *pdev;
 
-	struct regmap *gpr;
-	int id;
+    struct regmap *gpr;
+    int id;
 
     struct can_device_stats_t stats;
 };
@@ -102,7 +102,7 @@ struct canbus_device_t {
 struct canbus_file_t {
 
     unsigned int signature;         /* Used to sanity check typecasted pointers. */
-	struct canbus_device_t *dev;    /* Back pointer to the canbus_device_t structure. */
+    struct canbus_device_t *dev;    /* Back pointer to the canbus_device_t structure. */
     int accept_messages;            /* We need to explicitly turn on getting messages. */
 
     struct list_head reader_list_entry; /* entry into dev->reader_list */
@@ -157,32 +157,32 @@ void
 hw_initialize_hardware(struct canbus_device_t *dev);
 
 void
-hw_transmit_message(	struct canbus_device_t *dev,
-					CANBUS_MESSAGE *message);
+hw_transmit_message(struct canbus_device_t *dev,
+                    CANBUS_MESSAGE *message);
 
 /**
- *	Pull a message out of the MB.
+ *  Pull a message out of the MB.
  */
 unsigned int
-hw_receive_message(	struct canbus_device_t *dev,
-					CANBUS_MESSAGE *message,
-					int message_buffer_index);
+hw_receive_message( struct canbus_device_t *dev,
+                    CANBUS_MESSAGE *message,
+                    int message_buffer_index);
 
 void 
-hw_enable_message_buffer_interrupt(	    struct canbus_device_t *dev,
-								    int message_buffer_index);
+hw_enable_message_buffer_interrupt( struct canbus_device_t *dev,
+                                    int message_buffer_index);
 
 void 
-hw_disable_message_buffer_interrupt(	struct canbus_device_t *dev,
-								    int message_buffer_index);
+hw_disable_message_buffer_interrupt(struct canbus_device_t *dev,
+                                    int message_buffer_index);
 
 void 
-hw_clear_message_buffer_interrupt(	    struct canbus_device_t *dev,
-								    int message_buffer_index);
+hw_clear_message_buffer_interrupt(  struct canbus_device_t *dev,
+                                    int message_buffer_index);
 
 int
-hw_is_message_buffer_interrupting(	    struct canbus_device_t *dev,
-								    int message_buffer_index);
+hw_is_message_buffer_interrupting(  struct canbus_device_t *dev,
+                                    int message_buffer_index);
 
 void
 hw_enable_loopback_mode(struct canbus_device_t *dev);
@@ -203,6 +203,7 @@ void
 get_iflags(  struct canbus_device_t *dev,
             unsigned int *iflag1, 
             unsigned int *iflag2);
+
 /***************************************************************************/
 
 

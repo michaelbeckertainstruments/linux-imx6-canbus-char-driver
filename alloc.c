@@ -50,11 +50,11 @@ static int in_nomem_condition;
  */
 struct kcanbus_message * alloc_kcanbus_message(void)
 {
-	unsigned long flags;
+    unsigned long flags;
     struct kcanbus_message *msg;
     struct list_head *entry;
 
-	spin_lock_irqsave(&msg_pool_lock, flags);
+    spin_lock_irqsave(&msg_pool_lock, flags);
 
     if (list_empty(&msg_pool)){
         /*
@@ -93,7 +93,7 @@ EXIT:
  */
 void free_kcanbus_message(struct kcanbus_message *msg)
 {
-	unsigned long flags;
+    unsigned long flags;
     struct list_head *entry;
 
     /*
@@ -112,7 +112,7 @@ void free_kcanbus_message(struct kcanbus_message *msg)
 
     entry = &msg->entry;
 
-	spin_lock_irqsave(&msg_pool_lock, flags);
+    spin_lock_irqsave(&msg_pool_lock, flags);
 
     INIT_LIST_HEAD(entry);
     list_add(entry, &msg_pool);

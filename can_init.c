@@ -175,8 +175,8 @@ static int flexcan_probe(struct platform_device *pdev)
     platform_set_drvdata(pdev, dev);
     dev->pdev = pdev;
 
-	clk_prepare_enable(dev->clk_ipg);
-	clk_prepare_enable(dev->clk_per);
+    clk_prepare_enable(dev->clk_ipg);
+    clk_prepare_enable(dev->clk_per);
 
     dev->gpr = syscon_regmap_lookup_by_phandle(pdev->dev.of_node, "gpr");
     if (IS_ERR(dev->gpr)) {
@@ -217,13 +217,13 @@ static int flexcan_probe(struct platform_device *pdev)
      *  Enable the transcever
      */
     if (gpio_is_valid(dev->stby_gpio)) {
-	    if (dev->stby_gpio_flags & OF_GPIO_ACTIVE_LOW){
-   		    gpio_set_value(dev->stby_gpio, 0);
+        if (dev->stby_gpio_flags & OF_GPIO_ACTIVE_LOW){
+            gpio_set_value(dev->stby_gpio, 0);
         }
         else{
-   		    gpio_set_value(dev->stby_gpio, 1);
+            gpio_set_value(dev->stby_gpio, 1);
         }
-	}
+    }
 
     /*
      *  Do this last!  After cdev_add(), we are live!
@@ -255,16 +255,16 @@ FAILED_CDEV_ADD:
 FAILED_REQUEST_THREADED_IRQ:
 
     platform_set_drvdata(pdev, NULL);
-	clk_disable_unprepare(dev->clk_per);
-	clk_disable_unprepare(dev->clk_ipg);
+    clk_disable_unprepare(dev->clk_per);
+    clk_disable_unprepare(dev->clk_ipg);
 
     if (gpio_is_valid(dev->stby_gpio)){
-	    
+
         if (dev->stby_gpio_flags & OF_GPIO_ACTIVE_LOW){
-   		    gpio_set_value(dev->stby_gpio, 0);
+            gpio_set_value(dev->stby_gpio, 0);
         }
         else{
-   		    gpio_set_value(dev->stby_gpio, 1);
+            gpio_set_value(dev->stby_gpio, 1);
         }
 
         gpio_free(dev->stby_gpio);
@@ -309,15 +309,15 @@ static int flexcan_remove(struct platform_device *pdev)
 
     free_irq(dev->irq, dev);
     platform_set_drvdata(pdev, NULL);
-	clk_disable_unprepare(dev->clk_per);
-	clk_disable_unprepare(dev->clk_ipg);
+    clk_disable_unprepare(dev->clk_per);
+    clk_disable_unprepare(dev->clk_ipg);
 
     if (gpio_is_valid(dev->stby_gpio)){
         if (dev->stby_gpio_flags & OF_GPIO_ACTIVE_LOW){
-   		    gpio_set_value(dev->stby_gpio, 1);
+            gpio_set_value(dev->stby_gpio, 1);
         }
         else{
-   		    gpio_set_value(dev->stby_gpio, 0);
+            gpio_set_value(dev->stby_gpio, 0);
         }
         gpio_free(dev->stby_gpio);
     }
@@ -357,7 +357,7 @@ module_platform_driver(flexcan_driver);
 MODULE_AUTHOR(  "Michael Becker <mbecker@tainstruments.com>");
 
 MODULE_AUTHOR(  "Sascha Hauer <kernel@pengutronix.de>, "
-	            "Marc Kleine-Budde <kernel@pengutronix.de>");
+                "Marc Kleine-Budde <kernel@pengutronix.de>");
 
 MODULE_LICENSE("GPL v2");
 

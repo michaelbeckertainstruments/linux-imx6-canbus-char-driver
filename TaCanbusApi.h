@@ -1,16 +1,16 @@
 /**
- *	This is the public API between the CANbus driver and any application.
+ *  This is the public API between the CANbus driver and any application.
  *
- *	Naming conventions are different in this file from the kernel driver code.
- *	This reflects the reality that this entire project was originally a 
- *	Windows Embedded Compact 7 project, and we converetd it to Linux. While 
- *	it made good sense to follow all kernel naming conventions within the 
- *	driver itself, there wasn't time to convert all of the 
- *	user space code, which is heavily dependent on the CANBUS_MESSAGE 
- *	(and friends) structure.
- *	
- *	This header is NOT the same as the Protocol API.  The Protocol API 
- *	builds on this one.
+ *  Naming conventions are different in this file from the kernel driver code.
+ *  This reflects the reality that this entire project was originally a 
+ *  Windows Embedded Compact 7 project, and we converetd it to Linux. While 
+ *  it made good sense to follow all kernel naming conventions within the 
+ *  driver itself, there wasn't time to convert all of the 
+ *  user space code, which is heavily dependent on the CANBUS_MESSAGE 
+ *  (and friends) structure.
+ *  
+ *  This header is NOT the same as the Protocol API.  The Protocol API 
+ *  builds on this one.
  */
 #ifndef TA_CANBUS_API_H__
 #define TA_CANBUS_API_H__
@@ -29,33 +29,33 @@ extern "C" {
 /*
  *  All of the IOCTL functions we support.
  */
-#define CAN_IOCTL_READ_MCR			        _IOR(CAN_MAGIC_TYPE, 1, unsigned int)
-#define CAN_IOCTL_READ_CTRL1		        _IOR(CAN_MAGIC_TYPE, 2, unsigned int)
-#define CAN_IOCTL_READ_TIMER		        _IOR(CAN_MAGIC_TYPE, 3, unsigned int)
-#define CAN_IOCTL_READ_ECR			        _IOR(CAN_MAGIC_TYPE, 4, unsigned int)
-#define CAN_IOCTL_READ_ESR1			        _IOR(CAN_MAGIC_TYPE, 5, unsigned int)
-#define CAN_IOCTL_READ_IMASK2		        _IOR(CAN_MAGIC_TYPE, 6, unsigned int)
-#define CAN_IOCTL_READ_IMASK1		        _IOR(CAN_MAGIC_TYPE, 7, unsigned int)
-#define CAN_IOCTL_READ_IFLAG2		        _IOR(CAN_MAGIC_TYPE, 8, unsigned int)
-#define CAN_IOCTL_READ_IFLAG1		        _IOR(CAN_MAGIC_TYPE, 9, unsigned int)
-#define CAN_IOCTL_READ_CTRL2		        _IOR(CAN_MAGIC_TYPE, 10, unsigned int)
-#define CAN_IOCTL_READ_ESR2			        _IOR(CAN_MAGIC_TYPE, 11, unsigned int)
-#define CAN_IOCTL_READ_GFWR			        _IOR(CAN_MAGIC_TYPE, 12, unsigned int)
+#define CAN_IOCTL_READ_MCR                  _IOR(CAN_MAGIC_TYPE, 1, unsigned int)
+#define CAN_IOCTL_READ_CTRL1                _IOR(CAN_MAGIC_TYPE, 2, unsigned int)
+#define CAN_IOCTL_READ_TIMER                _IOR(CAN_MAGIC_TYPE, 3, unsigned int)
+#define CAN_IOCTL_READ_ECR                  _IOR(CAN_MAGIC_TYPE, 4, unsigned int)
+#define CAN_IOCTL_READ_ESR1                 _IOR(CAN_MAGIC_TYPE, 5, unsigned int)
+#define CAN_IOCTL_READ_IMASK2               _IOR(CAN_MAGIC_TYPE, 6, unsigned int)
+#define CAN_IOCTL_READ_IMASK1               _IOR(CAN_MAGIC_TYPE, 7, unsigned int)
+#define CAN_IOCTL_READ_IFLAG2               _IOR(CAN_MAGIC_TYPE, 8, unsigned int)
+#define CAN_IOCTL_READ_IFLAG1               _IOR(CAN_MAGIC_TYPE, 9, unsigned int)
+#define CAN_IOCTL_READ_CTRL2                _IOR(CAN_MAGIC_TYPE, 10, unsigned int)
+#define CAN_IOCTL_READ_ESR2                 _IOR(CAN_MAGIC_TYPE, 11, unsigned int)
+#define CAN_IOCTL_READ_GFWR                 _IOR(CAN_MAGIC_TYPE, 12, unsigned int)
 
-#define CAN_IOCTL_ENABLE_LOOPBACK	        _IO(CAN_MAGIC_TYPE, 13)
-#define CAN_IOCTL_DISABLE_LOOPBACK	        _IO(CAN_MAGIC_TYPE, 14)
+#define CAN_IOCTL_ENABLE_LOOPBACK           _IO(CAN_MAGIC_TYPE, 13)
+#define CAN_IOCTL_DISABLE_LOOPBACK          _IO(CAN_MAGIC_TYPE, 14)
 #define CAN_IOCTL_ENABLE_SELF_RECEPTION     _IO(CAN_MAGIC_TYPE, 15)
-#define CAN_IOCTL_DISABLE_SELF_RECEPTION	_IO(CAN_MAGIC_TYPE, 16)
-#define CAN_IOCTL_ENABLE_MESSAGE_ACCEPT	    _IO(CAN_MAGIC_TYPE, 17)
+#define CAN_IOCTL_DISABLE_SELF_RECEPTION    _IO(CAN_MAGIC_TYPE, 16)
+#define CAN_IOCTL_ENABLE_MESSAGE_ACCEPT     _IO(CAN_MAGIC_TYPE, 17)
 
 /*
  *  TODO -  If we want an application to get these, it should be via an IOCTL interface.
  *          For now, the /proc API works.
  */
 #if 0
-#define CAN_IOCTL_GET_FILE_STATS	        _IOR(CAN_MAGIC_TYPE, 18)
-#define CAN_IOCTL_GET_DEVICE_STATS	        _IOR(CAN_MAGIC_TYPE, 19)
-#define CAN_IOCTL_RESET_DEVICE_STATS	    _IO(CAN_MAGIC_TYPE, 20)
+#define CAN_IOCTL_GET_FILE_STATS            _IOR(CAN_MAGIC_TYPE, 18)
+#define CAN_IOCTL_GET_DEVICE_STATS          _IOR(CAN_MAGIC_TYPE, 19)
+#define CAN_IOCTL_RESET_DEVICE_STATS        _IO(CAN_MAGIC_TYPE, 20)
 #endif
 
 
@@ -65,9 +65,9 @@ extern "C" {
  */
 typedef enum CanbusMessageType_ {
 
-	CmtUndefined,
-	CmtStandard,
-	CmtExtended
+    CmtUndefined,
+    CmtStandard,
+    CmtExtended
 
 }CanbusMessageType;
 
@@ -80,10 +80,10 @@ typedef enum CanbusMessageType_ {
 
 typedef struct CANBUS_MESSAGE_
 {
-    unsigned int  Id;			/*  11/29-bit message identifier */
-    unsigned int  Type;			/*  Type of the message */
+    unsigned int  Id;           /*  11/29-bit message identifier */
+    unsigned int  Type;         /*  Type of the message */
     unsigned int  DataLength;   /*  Data Length Code of the message (0..8) */
-    unsigned char Data[8];		/*  Data of the message (DATA[0]..DATA[7]) */
+    unsigned char Data[8];      /*  Data of the message (DATA[0]..DATA[7]) */
 
 } CANBUS_MESSAGE, *PCANBUS_MESSAGE;
 
@@ -94,7 +94,7 @@ typedef struct CANBUS_MESSAGE_
 typedef struct CANBUS_STATUS_CHANGE_
 {
     unsigned int StatusChangeFlag;  /*  Set to CANBUS_STATUS_CHANGE_FLAG for now. */
-    unsigned int Status1;			/*  Uses CanStatusChange1 bits */
+    unsigned int Status1;           /*  Uses CanStatusChange1 bits */
     unsigned int Status2;           /*  Protocol stats - Driver should not use this. */
     unsigned int Status3;           /* */ 
     unsigned int Status4;           /* */ 
@@ -179,3 +179,4 @@ struct can_file_stats_t {
 #endif
 
 #endif 
+

@@ -21,7 +21,7 @@ static CANBUS_MESSAGE *msg_ptrs[FLEXCAN_NUM_MESSAGE_BUFFERS - FIRST_RX_MB];
  */
 irqreturn_t can_irq_fn(int irq, void *dev_id)
 {
-	unsigned long flags;
+    unsigned long flags;
     struct canbus_device_t *dev = (struct canbus_device_t *)dev_id;
     struct list_head *element;
     struct canbus_file_t *file;
@@ -56,7 +56,7 @@ irqreturn_t can_irq_fn(int irq, void *dev_id)
     memset(&status_change, 0, sizeof(CANBUS_STATUS_CHANGE));
     status_change.StatusChangeFlag = CANBUS_STATUS_CHANGE_FLAG;
 
-	/*
+    /*
      *  Check for errors.  Reading bits 15-10 clears them.  
      *  Bits 9-3 are status.
      */
@@ -69,7 +69,7 @@ irqreturn_t can_irq_fn(int irq, void *dev_id)
         dev->stats.tx_warn_count++;
         status_change.Status1 |= Csc1TxWarn; 
         iowrite32(ESR1_TWRN_INT, &dev->registers->ESR1);
-    	printk(KERN_ERR "ESR1_TWRN_INT\n");
+        printk(KERN_ERR "ESR1_TWRN_INT\n");
     }
 
     /*
@@ -79,7 +79,7 @@ irqreturn_t can_irq_fn(int irq, void *dev_id)
         dev->stats.rx_warn_count++;
         status_change.Status1 |= Csc1RxWarn; 
         iowrite32(ESR1_RWRN_INT, &dev->registers->ESR1);
-    	printk(KERN_ERR "ESR1_RWRN_INT\n");
+        printk(KERN_ERR "ESR1_RWRN_INT\n");
     }
 
     /*
@@ -89,7 +89,7 @@ irqreturn_t can_irq_fn(int irq, void *dev_id)
         dev->stats.bus_off_count++;
         status_change.Status1 |= Csc1BusOff; 
         iowrite32(ESR1_BOFF_INT, &dev->registers->ESR1);
-    	printk(KERN_ERR "ESR1_BOFF_INT\n");
+        printk(KERN_ERR "ESR1_BOFF_INT\n");
     }
 
     /*
@@ -97,7 +97,7 @@ irqreturn_t can_irq_fn(int irq, void *dev_id)
      */
     if (reg & ESR1_ERR_INT){
         iowrite32(ESR1_ERR_INT, &dev->registers->ESR1);
-    	printk(KERN_ERR "ESR1_ERR_INT\n");
+        printk(KERN_ERR "ESR1_ERR_INT\n");
 
         /*
          *  HW error statuses that get cleared when they were read.
@@ -105,13 +105,13 @@ irqreturn_t can_irq_fn(int irq, void *dev_id)
         if (reg & ESR1_BIT1_ERR){
             dev->stats.bit1_error_count++;
             status_change.Status1 |= Csc1Bit1Err; 
-        	printk(KERN_ERR "ESR1_BIT1_ERR\n");
+            printk(KERN_ERR "ESR1_BIT1_ERR\n");
         }
 
         if (reg & ESR1_BIT0_ERR){
             dev->stats.bit0_error_count++;
             status_change.Status1 |= Csc1Bit0Err; 
-        	printk(KERN_ERR "ESR1_BIT0_ERR\n");
+            printk(KERN_ERR "ESR1_BIT0_ERR\n");
         }
 
         /*
@@ -123,7 +123,7 @@ irqreturn_t can_irq_fn(int irq, void *dev_id)
             dev->stats.ack_error_count++;
  
             status_change.Status1 |= Csc1AckErr; 
-        	printk(KERN_ERR "ESR1_ACK_ERR\n");
+            printk(KERN_ERR "ESR1_ACK_ERR\n");
 
             /*
              *  Abort the HW transmission, because we have to.
@@ -157,19 +157,19 @@ irqreturn_t can_irq_fn(int irq, void *dev_id)
         if (reg & ESR1_CRC_ERR){
             dev->stats.crc_error_count++;
             status_change.Status1 |= Csc1CrcErr; 
-        	printk(KERN_ERR "ESR1_CRC_ERR\n");
+            printk(KERN_ERR "ESR1_CRC_ERR\n");
         }
 
         if (reg & ESR1_FRM_ERR){
             dev->stats.form_error_count++;
             status_change.Status1 |= Csc1FormErr; 
-        	printk(KERN_ERR "ESR1_FRM_ERR\n");
+            printk(KERN_ERR "ESR1_FRM_ERR\n");
         }
 
         if (reg & ESR1_STF_ERR){
             dev->stats.bitstuff_error_count++;
             status_change.Status1 |= Csc1StuffErr; 
-        	printk(KERN_ERR "ESR1_STF_ERR\n");
+            printk(KERN_ERR "ESR1_STF_ERR\n");
         }
     }
 
@@ -253,7 +253,7 @@ irqreturn_t can_irq_fn(int irq, void *dev_id)
      */
     get_iflags(dev, &iflag1, &iflag2);
 
-	/*
+    /*
      *  Need a time "after" all of the messages that we caught in 
      *  the Iflags.
      */
@@ -267,9 +267,9 @@ irqreturn_t can_irq_fn(int irq, void *dev_id)
         if (iBit & iflag1){
 
             message_timestamps[count] = hw_receive_message(dev, &message_buffers[count], i);
-			msg_ptrs[count] = &message_buffers[count];
+            msg_ptrs[count] = &message_buffers[count];
 
-			/*
+            /*
              *  Fix up the timestamps, if the message occurred "before" now,
              *  add a higher order bit because we wrapped.  
              *  What we really want to do is subtract from 
@@ -277,8 +277,8 @@ irqreturn_t can_irq_fn(int irq, void *dev_id)
              *  adding to the ones < Now effectively does the same thing.
              */
             if (message_timestamps[count] < now){
-				message_timestamps[count] += 0x10000;
-			}
+                message_timestamps[count] += 0x10000;
+            }
 
             count++;
         }
@@ -293,18 +293,18 @@ irqreturn_t can_irq_fn(int irq, void *dev_id)
         if (iBit & iflag2){
 
             message_timestamps[count] = hw_receive_message(dev, &message_buffers[count], i);
-			msg_ptrs[count] = &message_buffers[count];
+            msg_ptrs[count] = &message_buffers[count];
 
-			/*
+            /*
              *  Fix up the timestamps, if the message occurred "before" now,
              *  add a higher order bit because we wrapped.  
              *  What we really want to do is subtract from 
              *  messages > Now, but we are using 16 bit unsigned int math, so
              *  adding to the ones < Now effectively does the same thing.
              */
-			if (message_timestamps[count] < now){
-				message_timestamps[count] += 0x10000;
-			}
+            if (message_timestamps[count] < now){
+                message_timestamps[count] += 0x10000;
+            }
 
             count++;
         }
@@ -312,7 +312,7 @@ irqreturn_t can_irq_fn(int irq, void *dev_id)
         iBit <<= 1;
     }
 
-	/*
+    /*
      *  Sort this using an Insertion sort for now.
      *  We sort the Timestamps because they are what's sortable,
      *  and we carry the MsgPtrs along for the ride, because
@@ -321,22 +321,22 @@ irqreturn_t can_irq_fn(int irq, void *dev_id)
      */
     for (i = 1; i<count; i++){
 
-		unsigned int x = message_timestamps[i];
-		CANBUS_MESSAGE *y = msg_ptrs[i];
-		unsigned int j = i;
+        unsigned int x = message_timestamps[i];
+        CANBUS_MESSAGE *y = msg_ptrs[i];
+        unsigned int j = i;
 
-		while ((j > 0) && (message_timestamps[j-1] > x)){
+        while ((j > 0) && (message_timestamps[j-1] > x)){
 
-			message_timestamps[j] = message_timestamps[j - 1];
-			msg_ptrs[j] = msg_ptrs[j - 1];
-			j--;
-		}
+            message_timestamps[j] = message_timestamps[j - 1];
+            msg_ptrs[j] = msg_ptrs[j - 1];
+            j--;
+        }
 
-		message_timestamps[j] = x;
-		msg_ptrs[j] = y;
-	}
+        message_timestamps[j] = x;
+        msg_ptrs[j] = y;
+    }
 
-	dev->stats.total_mb_used += count;
+    dev->stats.total_mb_used += count;
     dev->stats.cur_mb_used = count;
     if (count > dev->stats.max_mb_used){
         dev->stats.max_mb_used = count;

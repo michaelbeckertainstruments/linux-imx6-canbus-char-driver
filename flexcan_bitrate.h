@@ -22,11 +22,11 @@ enum can_bitrate {
 
 
 /**
- *	Port of the Freescale bit rate calculations.
+ *  Port of the Freescale bit rate calculations.
  */
 unsigned int 
-can_update_bitrate(	unsigned int can_clock_frequency,	/*	Can protocol engine clock, input from CCM */
-					enum can_bitrate bitrate);	    /*	Requested Bitrate */
+can_update_bitrate( unsigned int can_clock_frequency,   /* Can protocol engine clock, input from CCM */
+                    enum can_bitrate bitrate);          /* Requested Bitrate */
 
 
 #endif
