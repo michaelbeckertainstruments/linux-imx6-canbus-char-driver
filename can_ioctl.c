@@ -59,6 +59,9 @@ long can_ioctl (struct file *filp, unsigned int cmd, unsigned long arg)
 
         case CAN_IOCTL_READ_ECR:
             reg = ioread32(&dev->registers->ECR);
+            if (copy_to_user((void *)arg, &reg, sizeof(unsigned int))){
+                return -EFAULT;
+            }
             break;
 
         case CAN_IOCTL_READ_ESR1:

@@ -252,8 +252,14 @@ hw_initialize_hardware(struct canbus_device_t *dev)
 
     /*
      *  Calculate the bitrate
+     *
+     *  TODO - In an ideal world this would be configurable via 
+     *  user space somehow. However, this driver is used in a closed
+     *  system and we have control over every microcontroller in 
+     *  this system, so we'll hard code it again until we get time
+     *  to revise this.
      */
-    reg = can_update_bitrate(dev->clock_freq, Mbps_1);
+    reg = can_update_bitrate(dev->clock_freq, Kbps_500);
 
     /*
      *  from the Flexcan example code...
