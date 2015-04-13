@@ -35,6 +35,8 @@ irqreturn_t can_irq_fn(int irq, void *dev_id)
     unsigned int iBit;
     struct timespec tv_start;
     struct timespec tv_end;
+    int errors_found = 0;
+    int err_bit_found;
 
     getnstimeofday(&tv_start);
 
@@ -66,52 +68,70 @@ irqreturn_t can_irq_fn(int irq, void *dev_id)
      *  Transmit warning interrupt triggered.
      */
     if (reg & ESR1_TWRN_INT){
+        errors_found = 1;
         dev->stats.tx_warn_count++;
         status_change.Status1 |= Csc1TxWarn; 
         iowrite32(ESR1_TWRN_INT, &dev->registers->ESR1);
-        printk(KERN_ERR "ESR1_TWRN_INT\n");
+
+        if (!dev->prior_errors_found)
+            printk(KERN_ERR "ESR1_TWRN_INT\n");
     }
 
     /*
      *  Receive warning interrupt triggered.
      */
     if (reg & ESR1_RWRN_INT){
+        errors_found = 1;
         dev->stats.rx_warn_count++;
         status_change.Status1 |= Csc1RxWarn; 
         iowrite32(ESR1_RWRN_INT, &dev->registers->ESR1);
-        printk(KERN_ERR "ESR1_RWRN_INT\n");
+
+        if (!dev->prior_errors_found)
+            printk(KERN_ERR "ESR1_RWRN_INT\n");
     }
 
     /*
      *  BUS OFF interrupt triggered.
      */
     if (reg & ESR1_BOFF_INT){
+        errors_found = 1;
         dev->stats.bus_off_count++;
         status_change.Status1 |= Csc1BusOff; 
         iowrite32(ESR1_BOFF_INT, &dev->registers->ESR1);
-        printk(KERN_ERR "ESR1_BOFF_INT\n");
+
+        if (!dev->prior_errors_found)
+            printk(KERN_ERR "ESR1_BOFF_INT\n");
     }
 
     /*
      *  Error interrupt triggered.  Now we check which error...
      */
     if (reg & ESR1_ERR_INT){
+
+        errors_found = 1;
+        err_bit_found = 0;
+
         iowrite32(ESR1_ERR_INT, &dev->registers->ESR1);
-        printk(KERN_ERR "ESR1_ERR_INT\n");
 
         /*
          *  HW error statuses that get cleared when they were read.
          */
         if (reg & ESR1_BIT1_ERR){
+            err_bit_found = 1;
             dev->stats.bit1_error_count++;
-            status_change.Status1 |= Csc1Bit1Err; 
-            printk(KERN_ERR "ESR1_BIT1_ERR\n");
+            status_change.Status1 |= Csc1Bit1Err;
+
+            if (!dev->prior_errors_found)
+                printk(KERN_ERR "ESR1_BIT1_ERR\n");
         }
 
         if (reg & ESR1_BIT0_ERR){
+            err_bit_found = 1;
             dev->stats.bit0_error_count++;
-            status_change.Status1 |= Csc1Bit0Err; 
-            printk(KERN_ERR "ESR1_BIT0_ERR\n");
+            status_change.Status1 |= Csc1Bit0Err;
+
+            if (!dev->prior_errors_found)
+                printk(KERN_ERR "ESR1_BIT0_ERR\n");
         }
 
         /*
@@ -120,10 +140,13 @@ irqreturn_t can_irq_fn(int irq, void *dev_id)
          */
         if (reg & ESR1_ACK_ERR){
 
+            err_bit_found = 1;
             dev->stats.ack_error_count++;
  
             status_change.Status1 |= Csc1AckErr; 
-            printk(KERN_ERR "ESR1_ACK_ERR\n");
+
+            if (!dev->prior_errors_found)
+                printk(KERN_NOTICE "ESR1_ACK_ERR\n");
 
             /*
              *  Abort the HW transmission, because we have to.
@@ -155,23 +178,41 @@ irqreturn_t can_irq_fn(int irq, void *dev_id)
         }
 
         if (reg & ESR1_CRC_ERR){
+            err_bit_found = 1;
             dev->stats.crc_error_count++;
-            status_change.Status1 |= Csc1CrcErr; 
-            printk(KERN_ERR "ESR1_CRC_ERR\n");
+            status_change.Status1 |= Csc1CrcErr;
+
+            if (!dev->prior_errors_found)
+                printk(KERN_ERR "ESR1_CRC_ERR\n");
         }
 
         if (reg & ESR1_FRM_ERR){
+            err_bit_found = 1;
             dev->stats.form_error_count++;
-            status_change.Status1 |= Csc1FormErr; 
-            printk(KERN_ERR "ESR1_FRM_ERR\n");
+            status_change.Status1 |= Csc1FormErr;
+
+            if (!dev->prior_errors_found)
+                printk(KERN_ERR "ESR1_FRM_ERR\n");
         }
 
         if (reg & ESR1_STF_ERR){
+            err_bit_found = 1;
             dev->stats.bitstuff_error_count++;
-            status_change.Status1 |= Csc1StuffErr; 
-            printk(KERN_ERR "ESR1_STF_ERR\n");
+            status_change.Status1 |= Csc1StuffErr;
+
+            if (!dev->prior_errors_found)
+                printk(KERN_ERR "ESR1_STF_ERR\n");
+        }
+
+        if (!err_bit_found && !dev->prior_errors_found){
+            printk(KERN_ERR "Received ESR1_ERR_INT without finding an error bit!\n");
         }
     }
+
+    /*
+     *  Save if there were any errors this time.
+     */
+    dev->prior_errors_found = errors_found;
 
 #if 0
     /*

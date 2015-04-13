@@ -86,13 +86,12 @@ struct canbus_device_t {
 
     int stby_gpio;
     enum of_gpio_flags stby_gpio_flags;
-
     struct platform_device *pdev;
-
     struct regmap *gpr;
     int id;
 
-    struct can_device_stats_t stats;
+    int prior_errors_found;                         /* Where there errors found in the last isr? */
+    struct can_device_stats_t stats;                /* Device based statistics */
 };
 
 
