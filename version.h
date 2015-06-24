@@ -6,7 +6,7 @@
 #ifndef VERSION_H__
 #define VERSION_H__
 
-MODULE_VERSION("4.0.0.1");
+MODULE_VERSION("5.0.0.6");
 
 #endif 
 
